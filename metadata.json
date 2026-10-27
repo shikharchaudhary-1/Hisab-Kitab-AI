@@ -1,0 +1,7 @@
+{
+  "name": "Hisab Kitab",
+  "description": "Hisab Kitab - Voice-driven bookkeeping ledger for Indian shopkeepers supporting Hindi, English, and Hinglish speech.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

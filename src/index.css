@@ -1,0 +1,1801 @@
+@import "tailwindcss";
+
+:root {
+  --bg-desk: #2A170F;
+  --bg-paper: #FBF3DC;
+  --line-blue: #B8CBE0;
+  --margin-red: #C0392B;
+  --maroon: #6B1D1D;
+  --maroon-dark: #4F1212;
+  --gold: #C9A227;
+  --gold-light: #DFBA48;
+  --ink-blue: #1E3A8A;
+  --ink-red: #B91C1C;
+  --dark-grey: #4B4B4B;
+  --pencil-grey: #4B4B4B;
+}
+
+/* Global Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-desk);
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide number input spinner arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* DESK CONTAINER (centers a 430px wide notebook on wider screens) */
+.desk-viewport {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background-color: var(--bg-desk);
+  overflow: hidden;
+}
+
+/* DIARY CONTAINER */
+.diary-container {
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  background-color: var(--bg-paper);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* DIARY PAGE */
+.diary-page {
+  width: 100%;
+  height: calc(100dvh - 58px - 48px);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background-color: var(--bg-paper);
+  /* Single thin red margin line at 56px + horizontal blue lines every 28px */
+  background-image:
+    linear-gradient(90deg, transparent 55px, #C0392B 55px, #C0392B 56px, transparent 56px),
+    repeating-linear-gradient(180deg, transparent, transparent 27px, #B8CBE0 27px, #B8CBE0 28px);
+  background-attachment: local;
+  background-size: 100% 100%, 100% 28px;
+  box-shadow: inset 0 0 50px rgba(160, 120, 75, 0.12);
+  scrollbar-width: none;
+}
+
+.diary-page::-webkit-scrollbar {
+  display: none;
+}
+
+/* CONTENT WRAPPER: Starts at 68px so text stays right of 56px red margin line */
+.page-content-wrapper {
+  width: 100%;
+  padding-left: 68px;
+  padding-right: 14px;
+  padding-top: 10px;
+  padding-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.bolo-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding-bottom: 12px;
+}
+
+/* HEADER: Traditional Maroon Binding */
+.bahi-header {
+  width: 100%;
+  background-color: var(--maroon);
+  color: var(--gold);
+  height: 58px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  z-index: 30;
+  flex-shrink: 0;
+}
+
+/* Gold stitch dashes along top and bottom edge */
+.bahi-stitch-top {
+  width: 100%;
+  height: 3px;
+  background-image: repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 4px, transparent 4px, transparent 8px);
+  opacity: 0.85;
+}
+
+.bahi-stitch-bottom {
+  width: 100%;
+  height: 3px;
+  background-image: repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 6px, transparent 6px, transparent 11px);
+  opacity: 0.9;
+}
+
+.bahi-header-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.bahi-app-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--gold);
+  margin: 0;
+  line-height: 1;
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  text-align: left;
+  flex: 1;
+}
+
+.bahi-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.bahi-gear-btn {
+  background: none;
+  border: none;
+  color: var(--gold);
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  transition: transform 0.2s ease, opacity 0.15s ease;
+}
+
+.bahi-gear-btn:hover {
+  transform: rotate(30deg);
+  opacity: 0.9;
+}
+
+/* Popover for settings & model selection */
+.bahi-settings-popover {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background-color: var(--maroon-dark);
+  border: 1.5px solid var(--gold);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 230px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  box-sizing: border-box;
+}
+
+.bahi-popover-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bahi-popover-section label {
+  font-size: 16px;
+  color: var(--gold);
+  font-weight: 400;
+  font-family: 'Kalam', cursive, sans-serif;
+}
+
+.bahi-lang-toggle-group {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.bahi-lang-btn {
+  flex: 1;
+  min-height: 44px;
+  background-color: var(--maroon);
+  color: #FFFFFF;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+
+.bahi-lang-btn.active {
+  background-color: var(--gold);
+  color: var(--maroon-dark);
+  font-weight: 700;
+  border-color: var(--gold-light);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.bahi-model-select {
+  background-color: var(--maroon);
+  color: #FFFFFF;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  min-height: 44px;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* ================= PAGE 1: BOLO ================= */
+.speak-mic-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: auto 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 0;
+}
+
+.bahi-mic-wrap {
+  position: relative;
+  width: 116px;
+  height: 116px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bahi-mic-btn {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #7D2424 0%, var(--maroon) 70%, #461010 100%);
+  border: 3.5px solid var(--gold);
+  box-shadow: 0 6px 18px rgba(107, 29, 29, 0.45);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.15s ease;
+  z-index: 2;
+}
+
+.bahi-mic-btn:hover {
+  transform: scale(1.03);
+}
+
+.bahi-mic-btn.listening {
+  border-color: #FACC15;
+  animation: gold-pulse 1.6s infinite;
+}
+
+@keyframes gold-pulse {
+  0% { box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.8), 0 6px 18px rgba(107, 29, 29, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(201, 162, 39, 0.25), 0 8px 24px rgba(107, 29, 29, 0.6); }
+  100% { box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.8), 0 6px 18px rgba(107, 29, 29, 0.5); }
+}
+
+.bahi-mic-subtext {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--ink-blue);
+  font-weight: 400;
+  text-align: center;
+}
+
+.bolo-bottom-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  margin-top: auto;
+  padding-bottom: 4px;
+}
+
+.bahi-sample-bottom-toggle {
+  background: none;
+  border: none;
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  touch-action: manipulation;
+  padding: 6px 16px;
+}
+
+.bahi-sample-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.bahi-sample-line {
+  background: none;
+  border: none;
+  border-bottom: 1px dotted var(--line-blue);
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  padding: 6px 4px;
+  min-height: 44px;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Single status line */
+.bahi-status-container {
+  width: 100%;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.bahi-single-status {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: var(--ink-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bahi-single-status.error {
+  color: var(--ink-red);
+}
+
+.bahi-retry-link {
+  background: none;
+  border: none;
+  color: var(--ink-red);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  text-decoration: underline dotted;
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  touch-action: manipulation;
+  margin-left: 8px;
+}
+
+/* ================= PAGE 2: AAJ KA HISAB ================= */
+.bahi-ledger-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  width: 100%;
+  line-height: 28px;
+}
+
+.bahi-ledger-date {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--maroon);
+  font-weight: 700;
+  text-align: left;
+}
+
+/* Entry Item: 2 Lines separated by faint pencil line */
+.bahi-entry-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.bahi-entry-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(138, 138, 138, 0.3);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Left margin marker button (0-56px margin space left of red line) */
+.bahi-margin-marker {
+  position: absolute;
+  left: -58px;
+  top: -2px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  z-index: 5;
+}
+
+.bahi-margin-marker-static {
+  position: absolute;
+  left: -58px;
+  top: -2px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.bahi-delete-btn-top {
+  position: absolute;
+  right: -6px;
+  top: -4px;
+  background: none;
+  border: none;
+  color: var(--dark-grey);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 22px;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  z-index: 6;
+}
+
+.bahi-delete-btn-top:hover {
+  color: var(--ink-red);
+}
+
+/* Line 1: Customer name (left) + Amount (right at 24px) */
+.bahi-entry-line-1 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 36px;
+}
+
+.bahi-input-customer {
+  background: transparent;
+  border: none;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink-blue);
+  padding: 0;
+  margin: 0;
+  outline: none;
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+}
+
+.bahi-input-customer.is-udhaar {
+  color: var(--ink-red);
+}
+
+.bahi-input-customer.is-payment-type {
+  color: #2F6B4F;
+}
+
+.bahi-input-customer.is-new-customer {
+  border-bottom: 1.5px dashed #EAB308;
+}
+
+/* Amount display & input right-aligned as "₹250" or "₹0" */
+.bahi-amount-display-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0;
+}
+
+.bahi-amount-display-wrap.is-zero {
+  border-bottom: 1.5px solid #EAB308;
+}
+
+.bahi-rupee-symbol {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink-blue);
+}
+
+.bahi-rupee-symbol.is-udhaar {
+  color: var(--ink-red);
+}
+
+.bahi-rupee-symbol.is-payment-type {
+  color: #2F6B4F;
+}
+
+.bahi-input-amount {
+  background: transparent;
+  border: none;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink-blue);
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  min-width: 1ch;
+}
+
+.bahi-input-amount.is-udhaar {
+  color: var(--ink-red);
+}
+
+.bahi-input-amount.is-payment-type {
+  color: #2F6B4F;
+}
+
+/* Line 2: Items (full width, wrapping allowed onto second line) */
+.bahi-entry-line-2 {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 28px;
+}
+
+.bahi-input-items-area {
+  background: transparent;
+  border: none;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  color: var(--dark-grey);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bahi-input-items-area-static {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  color: var(--dark-grey);
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: block;
+}
+
+/* + naya row text link */
+.bahi-add-row-link {
+  background: none;
+  border: none;
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  cursor: pointer;
+  padding: 6px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  touch-action: manipulation;
+  align-self: flex-start;
+}
+
+.bahi-add-row-link:hover {
+  text-decoration: underline;
+}
+
+/* Save entries (solid maroon, full width, gold text) */
+.bahi-btn-save-full {
+  width: 100%;
+  background-color: var(--maroon);
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+  border-radius: 6px;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  padding: 8px 16px;
+  min-height: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  margin-top: 8px;
+}
+
+.bahi-btn-save-full:hover:not(:disabled) {
+  background-color: var(--maroon-dark);
+  color: #FFF2A8;
+}
+
+.bahi-btn-save-full:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Small red Clear table text link */
+.bahi-btn-clear-link {
+  background: none;
+  border: none;
+  color: var(--ink-red);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  text-decoration: underline dotted;
+  cursor: pointer;
+  padding: 6px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  align-self: center;
+}
+
+/* Udhaar Khata Summary */
+.bahi-dues-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.bahi-dues-header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 28px;
+}
+
+.bahi-dues-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--maroon);
+  font-weight: 400;
+  margin: 0;
+}
+
+.bahi-dues-total {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  color: var(--ink-red);
+  font-weight: 700;
+}
+
+.bahi-dues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.bahi-customer-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  line-height: 28px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.bahi-day-row {
+  align-items: flex-start;
+  padding: 6px 0;
+}
+
+.bahi-customer-name {
+  color: var(--ink-blue);
+  font-weight: 700;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.bahi-dotted-leader {
+  flex: 1;
+  border-bottom: 1.5px dotted var(--line-blue);
+  margin: 0 8px;
+  height: 14px;
+}
+
+.bahi-customer-amount {
+  color: var(--ink-red);
+  font-weight: 700;
+  font-size: 20px;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.bahi-day-figures-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  justify-content: flex-end;
+  text-align: right;
+  line-height: 22px;
+}
+
+.bahi-btn-reminder-text {
+  background: none;
+  border: none;
+  color: var(--maroon);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 6px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  touch-action: manipulation;
+}
+
+/* ================= PAGE 3: KHATA HISTORY ================= */
+.bahi-khata-subtabs {
+  display: flex;
+  width: 100%;
+  border-bottom: 2px solid var(--line-blue);
+  margin-bottom: 8px;
+}
+
+.bahi-subtab {
+  flex: 1;
+  background: none;
+  border: none;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--dark-grey);
+  padding: 8px 0;
+  min-height: 44px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.bahi-subtab.active {
+  color: var(--maroon);
+  font-weight: 700;
+  border-bottom: 3px solid var(--gold);
+  margin-bottom: -2px;
+}
+
+.bahi-back-link {
+  background: none;
+  border: none;
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+  padding: 4px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  touch-action: manipulation;
+  align-self: flex-start;
+  margin-bottom: 4px;
+}
+
+.bahi-back-link:hover {
+  text-decoration: underline;
+}
+
+.bahi-cust-header-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.bahi-cust-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--maroon);
+  margin: 0;
+}
+
+.bahi-cust-unpaid-box {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.bahi-cust-unpaid-amount {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 28px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink-red);
+}
+
+.bahi-cust-actions-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.bahi-btn-payment {
+  background-color: var(--maroon);
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+  border-radius: 6px;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  padding: 6px 14px;
+  min-height: 44px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.bahi-btn-reminder-outlined {
+  background: transparent;
+  color: var(--maroon);
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  padding: 6px 14px;
+  min-height: 44px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+
+.bahi-btn-reminder-outlined:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bahi-timeline-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--maroon);
+  font-weight: 400;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px dashed var(--line-blue);
+  padding-bottom: 2px;
+}
+
+.bahi-payment-label {
+  color: var(--ink-blue);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.bahi-modal-input {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--ink-blue);
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* ================= BOTTOM BAR ================= */
+.bahi-bottom-bar {
+  width: 100%;
+  height: 48px;
+  background-color: var(--maroon);
+  border-top: 2px solid var(--gold);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  z-index: 40;
+  flex-shrink: 0;
+}
+
+.bahi-bottom-tab {
+  flex: 1;
+  background: var(--maroon);
+  border: none;
+  color: var(--bg-paper);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+  .bahi-bottom-tab {
+    font-size: 16px;
+    padding: 0 1px;
+  }
+}
+
+.bahi-bottom-tab.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 3px solid var(--gold);
+  background-color: var(--maroon-dark);
+}
+
+.bahi-bottom-tab:hover {
+  opacity: 0.9;
+}
+
+/* Confirmation Modal */
+.bahi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(36, 20, 14, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 60;
+}
+
+.bahi-modal-dialog {
+  background-color: var(--bg-paper);
+  border: 2px solid var(--maroon);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.bahi-modal-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--maroon);
+  margin: 0;
+}
+
+.bahi-modal-desc {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  color: var(--dark-grey);
+  margin: 0;
+}
+
+.bahi-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* Red Rotated PAID Stamp */
+.bahi-paid-stamp {
+  display: inline-block;
+  color: #B91C1C;
+  border: 2.5px solid #B91C1C;
+  border-radius: 4px;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 2px 10px;
+  text-transform: uppercase;
+  transform: rotate(-12deg);
+  animation: paid-press-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  letter-spacing: 2px;
+  margin-left: auto;
+  box-shadow: 0 1px 3px rgba(185, 28, 28, 0.25);
+}
+
+@keyframes paid-press-in {
+  0% {
+    transform: scale(2) rotate(-25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(-12deg);
+    opacity: 1;
+  }
+}
+/* =====================================================================
+   ADDED BLOCK: rules for the card-style layout used by the current App.tsx
+   (appended at the bottom; nothing above this line was changed)
+   ===================================================================== */
+
+/* ---------- Shared small pieces ---------- */
+.bahi-amount-cell-combined {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.bahi-empty-state {
+  width: 100%;
+  padding: 16px 0;
+  text-align: center;
+  color: var(--dark-grey);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+}
+.bahi-empty-state p { margin: 0; }
+
+.marker-dot {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--ink-red);
+  border-radius: 3px;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+/* ---------- PAGE 2: AAJ KA HISAB (ledger rows) ---------- */
+.bahi-ledger-table-wrap {
+  width: 100%;
+}
+
+.bahi-ledger-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.bahi-ledger-row-card {
+  position: relative;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(138, 138, 138, 0.3);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.bahi-ledger-row-card.selected {
+  background-color: rgba(107, 29, 29, 0.06);
+}
+
+.bahi-ledger-row-card.needs-review {
+  border-bottom: 1.5px dashed #EAB308;
+}
+
+.bahi-ledger-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Line 1: name on the left, amount on the right */
+.bahi-ledger-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+}
+
+/* Marker sits in the left margin, left of the red line */
+.bahi-margin-marker-wrap {
+  position: absolute;
+  left: -58px;
+  top: 6px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.bahi-marker-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bahi-marker-btn:disabled {
+  cursor: default;
+}
+
+.bahi-card-customer-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink-blue);
+}
+
+.bahi-card-amount-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.bahi-card-amount-input {
+  width: 6.5ch;
+  min-width: 2ch;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink-blue);
+  text-align: left;
+}
+
+/* Line 2: items */
+.bahi-ledger-card-bottom {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+}
+
+.bahi-card-items-input {
+  width: 100%;
+  min-width: 0;
+  min-height: 28px;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 28px;
+  color: var(--dark-grey);
+}
+
+.bahi-card-delete-btn {
+  position: absolute;
+  right: -4px;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  color: var(--dark-grey);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  z-index: 6;
+}
+
+.bahi-card-delete-btn:hover {
+  color: var(--ink-red);
+}
+
+/* Add row + Save + Clear */
+.bahi-add-row-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.bahi-btn-add-row {
+  background: none;
+  border: none;
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  cursor: pointer;
+  padding: 6px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  touch-action: manipulation;
+}
+
+.bahi-btn-add-row:hover {
+  text-decoration: underline;
+}
+
+.bahi-action-buttons-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+}
+
+.bahi-btn-save-full.disabled,
+.bahi-btn-clear-link.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Udhaar summary card */
+.bahi-udhaar-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  background-color: var(--bg-paper);
+  border: 1.5px solid var(--maroon);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.bahi-summary-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--maroon);
+}
+
+.bahi-summary-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ink-red);
+  font-weight: 700;
+}
+
+.bahi-summary-total > span:first-child {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--maroon);
+}
+
+.bahi-summary-total .bahi-rupee-symbol {
+  color: var(--ink-red);
+}
+
+.bahi-no-dues {
+  color: var(--dark-grey);
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.bahi-due-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  border-bottom: 1px dotted var(--line-blue);
+}
+
+.bahi-due-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink-blue);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}
+
+.bahi-due-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink-red);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.bahi-due-right .bahi-rupee-symbol {
+  color: var(--ink-red);
+  font-size: 20px;
+}
+
+.bahi-btn-reminder {
+  background: none;
+  border: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.bahi-btn-reminder-lg {
+  background: transparent;
+  border: 1.5px solid var(--maroon);
+  border-radius: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* ---------- PAGE 3: KHATA ---------- */
+.bahi-khata-main-view,
+.bahi-customer-detail-view,
+.bahi-date-detail-view {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.bahi-sub-tabs {
+  display: flex;
+  width: 100%;
+  border-bottom: 2px solid var(--line-blue);
+  margin-bottom: 8px;
+}
+
+.bahi-sub-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--dark-grey);
+  padding: 8px 0;
+  min-height: 44px;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+}
+
+.bahi-sub-tab.active {
+  color: var(--maroon);
+  font-weight: 700;
+  border-bottom: 3px solid var(--gold);
+  margin-bottom: -2px;
+}
+
+.bahi-back-btn {
+  background: none;
+  border: none;
+  color: var(--ink-blue);
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+  padding: 4px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  touch-action: manipulation;
+}
+
+.bahi-back-btn:hover {
+  text-decoration: underline;
+}
+
+/* Customers list */
+.bahi-customer-list,
+.bahi-days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.bahi-customer-row-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--line-blue);
+  cursor: pointer;
+}
+
+.bahi-customer-row-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.bahi-customer-row-name {
+  color: var(--ink-blue);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}
+
+.bahi-customer-row-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+}
+
+.bahi-customer-row-right .bahi-rupee-symbol {
+  color: inherit;
+  font-size: 20px;
+}
+
+.bahi-advance-amount {
+  color: #2F6B4F;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Days list */
+.bahi-day-row-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--line-blue);
+  cursor: pointer;
+}
+
+.bahi-day-row-left {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.bahi-day-row-date {
+  color: var(--ink-blue);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.bahi-day-row-count {
+  color: var(--dark-grey);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.bahi-day-row-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bahi-day-totals {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.cash-total { color: var(--ink-blue); }
+.udhaar-total { color: var(--ink-red); }
+.received-total { color: #2F6B4F; }
+
+/* Customer detail */
+.bahi-customer-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.bahi-customer-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--maroon);
+  margin: 0;
+}
+
+.bahi-customer-balance-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.bahi-customer-balance-badge.unpaid { color: var(--ink-red); }
+.bahi-customer-balance-badge.advance { color: #2F6B4F; }
+
+.bahi-customer-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.bahi-customer-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.bahi-timeline-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(138, 138, 138, 0.3);
+}
+
+.bahi-timeline-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bahi-timeline-date {
+  color: var(--dark-grey);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.bahi-timeline-badge {
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0 8px;
+  border-radius: 10px;
+  border: 1px solid currentColor;
+}
+.bahi-timeline-badge.cash { color: var(--ink-blue); }
+.bahi-timeline-badge.credit { color: var(--ink-red); }
+.bahi-timeline-badge.payment { color: #2F6B4F; }
+
+.bahi-timeline-card-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bahi-timeline-items {
+  flex: 1;
+  min-width: 0;
+  color: var(--dark-grey);
+  font-size: 16px;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}
+
+.bahi-timeline-amount {
+  flex-shrink: 0;
+  color: var(--ink-blue);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+/* Date detail */
+.bahi-date-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.bahi-date-title {
+  font-family: 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--maroon);
+  margin: 0;
+}
+
+.bahi-date-totals-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.cash-pill,
+.credit-pill,
+.received-pill {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+  border: 1px solid currentColor;
+}
+.cash-pill { color: var(--ink-blue); }
+.credit-pill { color: var(--ink-red); }
+.received-pill { color: #2F6B4F; }
+
+.bahi-customer-name-static {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink-blue);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}/* ===== Udhaar rows: name + amount in red ===== */
+.bahi-ledger-row-card:has(.marker-udhaar) .bahi-card-customer-input,
+.bahi-ledger-row-card:has(.marker-udhaar) .bahi-card-amount-input,
+.bahi-ledger-row-card:has(.marker-udhaar) .bahi-rupee-symbol {
+  color: var(--ink-red);
+}
+
+/* Same in Khata > day detail */
+.bahi-entry-item:has(.udhaar-dot) .bahi-customer-name-static,
+.bahi-entry-item:has(.udhaar-dot) .bahi-amount-cell-combined,
+.bahi-entry-item:has(.udhaar-dot) .bahi-rupee-symbol {
+  color: var(--ink-red);
+}
+
+/* Same in Khata > customer timeline */
+.bahi-timeline-card:has(.bahi-timeline-badge.credit) .bahi-timeline-amount {
+  color: var(--ink-red);
+}
